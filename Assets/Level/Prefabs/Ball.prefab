@@ -161,5 +161,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 02fd3020e3163884eb1081bb7e7b04ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  inactivityThreshold: 30
+  inactivityThreshold: 5
   rb: {fileID: 5766819803497081395}
