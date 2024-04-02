@@ -34,7 +34,7 @@ public class StateManager : MonoBehaviour {
         }
         this.brushState = BrushState.Pencil;
         this.noteState = NoteState.noNote;
-        this.isPlaying = false;
+        this.isPlaying = true;
     }
 
     public void toggleIsPlaying() {

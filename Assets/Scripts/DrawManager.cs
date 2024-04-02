@@ -21,5 +21,7 @@ public class DrawManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
  
         if(Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) currentLine.SetPosition(mousePos);
+
+        if(Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2) Destroy(currentLine.gameObject);
     }
 }
