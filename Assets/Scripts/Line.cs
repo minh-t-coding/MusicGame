@@ -4,15 +4,15 @@ using UnityEngine;
 
 public class Line : MonoBehaviour
 {
-    [SerializeField] private LineRenderer _renderer;
-    [SerializeField] private EdgeCollider2D _collider;
+    [SerializeField] private LineRenderer lineRenderer;
+    [SerializeField] private EdgeCollider2D edgeCollider;
 
-    private readonly List<Vector2> _points = new List<Vector2>();
+    private readonly List<Vector2> points = new List<Vector2>();
 
     // Start is called before the first frame update
     void Start()
     {
-        _collider.transform.position = Vector3.zero;
+        edgeCollider.transform.position = Vector3.zero;
     }
 
     // Update is called once per frame
@@ -24,17 +24,17 @@ public class Line : MonoBehaviour
     public void SetPosition(Vector2 pos) {
         if(!CanAppend(pos)) return;
  
-        _points.Add(pos);
+        points.Add(pos);
 
-        _renderer.positionCount++;
-        _renderer.SetPosition(_renderer.positionCount-1,pos);
+        lineRenderer.positionCount++;
+        lineRenderer.SetPosition(lineRenderer.positionCount-1,pos);
 
-        _collider.points = _points.ToArray();
+        edgeCollider.points = points.ToArray();
     }
 
     private bool CanAppend(Vector2 pos) {
-        if (_renderer.positionCount == 0) return true;
+        if (lineRenderer.positionCount == 0) return true;
  
-        return Vector2.Distance(_renderer.GetPosition(_renderer.positionCount - 1), pos) > DrawManager.RESOLUTION;
+        return Vector2.Distance(lineRenderer.GetPosition(lineRenderer.positionCount - 1), pos) > DrawManager.RESOLUTION;
     }
 }
