@@ -14,10 +14,9 @@ public class BallEmitter : MonoBehaviour {
 
     IEnumerator SpawnObjectCoroutine() {
         while (true) {
-            // Instantiate(_ball, transform.position, Quaternion.identity);
             GameObject ball = BallPool.instance.GetPooledObject();
 
-            if (ball != null) {
+            if (ball != null && StateManager.instance.getIsPlaying()) {
                 ball.transform.position = transform.position;
                 ball.SetActive(true);
             }
