@@ -3,23 +3,23 @@ using System.Collections.Generic;
 using UnityEngine;
  
 public class DrawManager : MonoBehaviour {
-    private Camera _cam;
-    [SerializeField] private Line _linePrefab;
+    private Camera cam;
+    [SerializeField] private Line linePrefab;
  
     public const float RESOLUTION = .1f;
  
-    private Line _currentLine;
+    private Line currentLine;
     void Start()
     {
-         _cam = Camera.main;   
+         cam = Camera.main;   
     }
  
  
     void Update() {
-        Vector2 mousePos = _cam.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
  
-        if (Input.GetMouseButtonDown(0)) _currentLine = Instantiate(_linePrefab, mousePos, Quaternion.identity);
+        if (Input.GetMouseButtonDown(0)) currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
  
-        if(Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) _currentLine.SetPosition(mousePos);
+        if(Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) currentLine.SetPosition(mousePos);
     }
 }

@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3fcbb0f442566fe498632af5eb2beb18, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _renderer: {fileID: 3569500219388572800}
-  _collider: {fileID: 4186559967048989571}
+  lineRenderer: {fileID: 3569500219388572800}
+  edgeCollider: {fileID: 4186559967048989571}
 --- !u!120 &3569500219388572800
 LineRenderer:
   serializedVersion: 2
@@ -215,7 +215,7 @@ EdgeCollider2D:
   m_UsedByEffector: 0
   m_UsedByComposite: 0
   m_Offset: {x: 0, y: 0}
-  m_EdgeRadius: 0.07
+  m_EdgeRadius: 0.05
   m_Points:
   - {x: -0.5, y: 0}
   - {x: 0.5, y: 0}
