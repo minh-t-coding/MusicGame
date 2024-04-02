@@ -37,4 +37,8 @@ public class Line : MonoBehaviour
  
         return Vector2.Distance(lineRenderer.GetPosition(lineRenderer.positionCount - 1), pos) > DrawManager.RESOLUTION;
     }
+
+    public int getPointsCount() {
+        return points.Count;
+    }
 }
