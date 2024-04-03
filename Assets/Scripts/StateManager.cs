@@ -41,13 +41,7 @@ public class StateManager : MonoBehaviour {
 
     public void toggleIsPlaying() {
         this.isPlaying = !isPlaying;
-        if (isPlaying) {
-            Time.timeScale = 1f;
-        }
-    }
-
-    private void FixedUpdate() {    
-        if (!isPlaying) {
+        if (Time.timeScale.Equals(1f)) {
             Time.timeScale = 0f;
         } else {
             Time.timeScale = 1f;
