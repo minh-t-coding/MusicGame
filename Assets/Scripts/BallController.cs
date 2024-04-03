@@ -22,7 +22,7 @@ public class BallController : MonoBehaviour {
         else
         {
             // Check if the ball has been inactive for the specified threshold
-            if (Time.time - lastPositionUpdateTime >= inactivityThreshold)
+            if ((Time.time - lastPositionUpdateTime >= inactivityThreshold) && StateManager.instance.getIsPlaying())
             {
                 // Deactivate the ball object
                 gameObject.SetActive(false);
