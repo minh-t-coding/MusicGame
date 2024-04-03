@@ -35,15 +35,22 @@ public class StateManager : MonoBehaviour {
         this.brushState = BrushState.Pencil;
         this.noteState = NoteState.noNote;
         this.isPlaying = true;
+
+        Time.timeScale = 1f;
     }
 
     public void toggleIsPlaying() {
         this.isPlaying = !isPlaying;
-        
+        if (isPlaying) {
+            Time.timeScale = 1f;
+        }
+    }
+
+    private void FixedUpdate() {    
         if (!isPlaying) {
-            BallPool.instance.PauseBalls();
+            Time.timeScale = 0f;
         } else {
-            BallPool.instance.UnpauseBalls();
+            Time.timeScale = 1f;
         }
     }
 
