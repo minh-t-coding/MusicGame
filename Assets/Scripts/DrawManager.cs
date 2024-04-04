@@ -17,11 +17,50 @@ public class DrawManager : MonoBehaviour {
  
     void Update() {
         Vector2 mousePos = cam.ScreenToWorldPoint(Input.mousePosition);
- 
-        if (Input.GetMouseButtonDown(0)) currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
- 
-        if(Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) currentLine.SetPosition(mousePos);
 
-        if(Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2) Destroy(currentLine.gameObject);
+        switch (StateManager.instance.getBrushState()) {
+            case StateManager.BrushState.Pencil:
+                drawLine(mousePos);
+                break;
+            case StateManager.BrushState.Eraser:
+                eraseStuff(mousePos);
+                break;
+        }
+       
+    }
+
+    private void drawLine(Vector2 mousePos) {
+        if (Input.GetMouseButtonDown(0)) {
+            currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
+        }
+ 
+        if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) {
+            currentLine.SetPosition(mousePos);
+        }
+
+        if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2) {
+            Destroy(currentLine.gameObject);
+        }
+    }
+
+    private void eraseStuff(Vector2 mousePos) {
+        if (Input.GetMouseButtonDown(0) || Input.GetMouseButton(0)) {
+            RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
+
+            if (hit.collider != null) {
+                if (hit.collider.gameObject.transform.parent != null) { // TODO: look at refactoring this logic 
+                    GameObject clickedObject = hit.collider.gameObject.transform.parent.gameObject;
+
+                    if (IsErasable(clickedObject)) {
+                        Destroy(clickedObject);
+                    }
+                }
+                
+            }
+        }
+    }
+
+     private bool IsErasable(GameObject obj) {
+        return obj.CompareTag("IsErasable");
     }
 }

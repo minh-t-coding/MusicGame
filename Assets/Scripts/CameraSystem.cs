@@ -39,7 +39,7 @@ public class CameraSystem : MonoBehaviour {
 
         targetOrthographicSize = Mathf.Clamp(targetOrthographicSize, minOrthographicSize, maxOrthographicSize);
 
-        float zoomSpeed = 1f;
-        cinemachineVirtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.OrthographicSize, targetOrthographicSize, Time.fixedDeltaTime * zoomSpeed);
+        float zoomSpeed = 5f;
+        cinemachineVirtualCamera.m_Lens.OrthographicSize = Mathf.Lerp(cinemachineVirtualCamera.m_Lens.OrthographicSize, targetOrthographicSize, Time.unscaledDeltaTime * zoomSpeed);
     }
 }
