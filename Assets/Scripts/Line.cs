@@ -13,6 +13,8 @@ public class Line : MonoBehaviour
     void Start()
     {
         edgeCollider.transform.position = Vector3.zero;
+        lineRenderer.startColor = StateManager.instance.getNoteState().getColor();
+        lineRenderer.endColor = StateManager.instance.getNoteState().getColor();
     }
 
     // Update is called once per frame
