@@ -26,6 +26,10 @@ public class DrawManager : MonoBehaviour {
                 eraseStuff(mousePos);
                 break;
         }
+
+        if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2 && currentLine != null) {
+            Destroy(currentLine.gameObject);
+        }
        
     }
 
@@ -36,10 +40,6 @@ public class DrawManager : MonoBehaviour {
  
         if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) {
             currentLine.SetPosition(mousePos);
-        }
-
-        if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2) {
-            Destroy(currentLine.gameObject);
         }
     }
 
