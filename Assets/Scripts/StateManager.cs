@@ -11,23 +11,12 @@ public class StateManager : MonoBehaviour {
         Paint
     }
 
-    public enum NoteState {
-        cNote,
-        dNote,
-        eNote,
-        fNote,
-        gNote,
-        aNote,
-        bNote,
-        noNote
-    }
-
     [SerializeField] private Texture2D[] cursorTextures;
 
     public static StateManager instance;
 
     private BrushState brushState = BrushState.Pencil;
-    private NoteState noteState = NoteState.noNote;
+    private NoteState noteState;
     private bool isPlaying = false;
     private float fixedDeltaTime;
     
@@ -36,18 +25,23 @@ public class StateManager : MonoBehaviour {
             instance = this;
         }
         this.brushState = BrushState.Pencil;
-        this.noteState = NoteState.noNote;
         this.isPlaying = true;
-
+        this.noteState = new NoteState(NoteState.Note.none);
         Time.timeScale = 1f;
         this.fixedDeltaTime = Time.fixedDeltaTime;
+    }
+
+    void Update() {
+        if (Input.GetKey("escape")) {
+            Application.Quit();
+        }
     }
 
     private void setCursor(BrushState brushState) {
         Vector2 cursorHotspot;
         switch (brushState) {
             case BrushState.Pencil:
-                cursorHotspot = new Vector2(cursorTextures[0].width / 2, cursorTextures[0].height / 2);
+                cursorHotspot = new Vector2(cursorTextures[0].width / 2, cursorTextures[0].height / 2); // Getting the middle of the cursor
                 Cursor.SetCursor(cursorTextures[0], cursorHotspot, CursorMode.Auto);
                 break;
             case BrushState.Eraser:
@@ -78,5 +72,13 @@ public class StateManager : MonoBehaviour {
 
     public BrushState getBrushState() {
         return this.brushState;
+    }
+
+    public void setNoteState(NoteState noteState) {
+        this.noteState = noteState;
+    }
+
+    public NoteState getNoteState() {
+        return this.noteState;
     }
 }
