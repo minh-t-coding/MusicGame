@@ -8,11 +8,11 @@ public class NoteColorLookupTable {
     // Static constructor to initialize the lookup table
     static NoteColorLookupTable() {
         // Add data to the lookup table
-        dataLookup.Add(NoteState.Note.none, new Color32(44, 62, 80, 255));
-        dataLookup.Add(NoteState.Note.kick, new Color32(46, 204, 113, 255));
-        dataLookup.Add(NoteState.Note.clap, new Color32(52, 152, 219, 255));
-        dataLookup.Add(NoteState.Note.snare, new Color32(155, 89, 182, 255));
-        dataLookup.Add(NoteState.Note.hat, new Color32(231, 76, 60, 255));
+        dataLookup.Add(NoteState.Note.none, new Color32(44, 62, 80, 255)); // none = black
+        dataLookup.Add(NoteState.Note.kick, new Color32(46, 204, 113, 255)); // kick = green
+        dataLookup.Add(NoteState.Note.clap, new Color32(52, 152, 219, 255)); // clap = blue
+        dataLookup.Add(NoteState.Note.snare, new Color32(155, 89, 182, 255)); // snare = purple
+        dataLookup.Add(NoteState.Note.hat, new Color32(231, 76, 60, 255)); // hat = red
     }
 
     // Method to access the lookup table

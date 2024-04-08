@@ -27,10 +27,7 @@ public class DrawManager : MonoBehaviour {
                 break;
         }
 
-        if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2 && currentLine != null) {
-            Destroy(currentLine.gameObject);
-        }
-       
+        cleanupPointLines();
     }
 
     private void drawLine(Vector2 mousePos) {
@@ -48,8 +45,8 @@ public class DrawManager : MonoBehaviour {
             RaycastHit2D hit = Physics2D.Raycast(mousePos, Vector2.zero);
 
             if (hit.collider != null) {
-                if (hit.collider.gameObject.transform.parent != null) { // TODO: look at refactoring this logic 
-                    GameObject clickedObject = hit.collider.gameObject.transform.parent.gameObject;
+                if (hit.collider.gameObject != null) { // TODO: look at refactoring this logic 
+                    GameObject clickedObject = hit.collider.gameObject.transform.gameObject;
 
                     if (IsErasable(clickedObject)) {
                         Destroy(clickedObject);
@@ -60,7 +57,13 @@ public class DrawManager : MonoBehaviour {
         }
     }
 
-     private bool IsErasable(GameObject obj) {
+    private void cleanupPointLines() {
+        if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2 && currentLine != null) {
+            Destroy(currentLine.gameObject);
+        }
+    }
+
+    private bool IsErasable(GameObject obj) {
         return obj.CompareTag("IsErasable");
     }
 }

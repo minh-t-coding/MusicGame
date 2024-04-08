@@ -21,7 +21,7 @@ public class NoteState {
         return this.color;
     }
 
-    private Note getNote() {
+    public Note getNote() {
         return this.note;
     }
 

@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,49 @@ public class Line : MonoBehaviour
     [SerializeField] private LineRenderer lineRenderer;
     [SerializeField] private EdgeCollider2D edgeCollider;
 
+    private NoteState noteState;
+
+    [SerializeField] private String noteType; // TODO: REMOVE LATER
+    [SerializeField] private Color color;  // TODO: REMOVE LATER
+
     private readonly List<Vector2> points = new List<Vector2>();
 
     // Start is called before the first frame update
     void Start()
     {
         edgeCollider.transform.position = Vector3.zero;
-        lineRenderer.startColor = StateManager.instance.getNoteState().getColor();
-        lineRenderer.endColor = StateManager.instance.getNoteState().getColor();
+        this.noteState = StateManager.instance.getNoteState();
+        
+
+        if (noteType != "" && color != null) {  // TODO: REMOVE LATER
+            NoteState.Note note = NoteState.Note.none;
+            switch (noteType) {
+                case "Snare":
+                    note = NoteState.Note.snare;
+                    break;
+                case "Hat":
+                    note = NoteState.Note.hat;
+                    break;
+                case "Kick":
+                    note = NoteState.Note.kick;
+                    break;
+                case "Clap":
+                    note = NoteState.Note.clap;
+                    break;
+            }
+            this.noteState = new NoteState(note);
+        }
+
+        lineRenderer.startColor = noteState.getColor();
+        lineRenderer.endColor = noteState.getColor();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
+    void OnCollisionEnter2D(Collision2D collision) {
+        if (collision.gameObject.CompareTag("Player")) {
+            AudioManager.instance.playNote(noteState.getNote());
+        }
     }
+    
 
     public void SetPosition(Vector2 pos) {
         if(!CanAppend(pos)) return;

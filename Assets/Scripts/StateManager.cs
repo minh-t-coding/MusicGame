@@ -31,6 +31,12 @@ public class StateManager : MonoBehaviour {
         this.fixedDeltaTime = Time.fixedDeltaTime;
     }
 
+    void Update() {
+        if (Input.GetKey("escape")) {
+            Application.Quit();
+        }
+    }
+
     private void setCursor(BrushState brushState) {
         Vector2 cursorHotspot;
         switch (brushState) {
