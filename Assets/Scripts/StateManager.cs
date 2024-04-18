@@ -18,17 +18,22 @@ public class StateManager : MonoBehaviour {
     private BrushState brushState = BrushState.Pencil;
     private NoteState noteState;
     private bool isPlaying = false;
-    private float fixedDeltaTime;
+    private float originalFixedDeltaTime;
     
     private void Awake() {
         if (instance == null) {
             instance = this;
         }
+
+        // Setting Default States
         this.brushState = BrushState.Pencil;
-        this.isPlaying = true;
         this.noteState = new NoteState(NoteState.Note.none);
-        Time.timeScale = 1f;
-        this.fixedDeltaTime = Time.fixedDeltaTime;
+        
+        // Setting Default Play State
+        this.isPlaying = false;
+        this.originalFixedDeltaTime = Time.fixedDeltaTime; // Save a reference to the original fixedDeltaTime
+        Time.timeScale = 0f;
+        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
     }
 
     void Update() {
@@ -53,12 +58,23 @@ public class StateManager : MonoBehaviour {
 
     public void toggleIsPlaying() {
         this.isPlaying = !isPlaying;
-        if (Time.timeScale.Equals(1f)) {
+        if (!this.isPlaying) { // Pause Game
+            CameraSystem.instance.UseFreeCamera();
             Time.timeScale = 0f;
-        } else {
+        } else { // Play Game
             Time.timeScale = 1f;
+            CameraSystem.instance.UseBallFollowCamera();
         }
-        Time.fixedDeltaTime = this.fixedDeltaTime * Time.timeScale;
+        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
+    }
+
+    public void StopPlaying() {
+        isPlaying = false;
+        CameraSystem.instance.ResetCamera();
+        BallController.instance.ResetBallPosition();
+        Time.timeScale = 0f;
+        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
+
     }
 
     public bool getIsPlaying() {

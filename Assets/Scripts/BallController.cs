@@ -4,12 +4,33 @@ using UnityEngine;
 
 public class BallController : MonoBehaviour {
 
+    public static BallController instance;
+
     [SerializeField] private float inactivityThreshold = 30f;
     [SerializeField] private Rigidbody2D rb;
     private float lastPositionUpdateTime;
+    private Vector3 initialBallPosition;
+
+    private void Awake() {
+        if (instance == null) {
+            instance = this;
+        }
+
+        initialBallPosition = gameObject.transform.position;
+    }
 
     private void Start() {
         lastPositionUpdateTime = Time.time;
+    }
+
+    public void ResetBallPosition() {
+        gameObject.transform.position = initialBallPosition;
+        rb.velocity = Vector3.zero;
+        rb.angularVelocity = 0f;
+    }
+
+    public Vector3 GetBallPosition() {
+        return gameObject.transform.position;
     }
 
     private void FixedUpdate() {

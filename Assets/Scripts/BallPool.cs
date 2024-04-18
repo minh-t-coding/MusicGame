@@ -6,10 +6,7 @@ public class BallPool : MonoBehaviour
 {
     public static BallPool instance;
 
-    private List<GameObject> pooledObjects = new List<GameObject>();
-
-    [SerializeField] private int amountToPool = 20;
-    [SerializeField] private GameObject ballPrefab;
+    [SerializeField] private List<GameObject> pooledObjects = new List<GameObject>();
 
     private void Awake() {
         if (instance == null) {
@@ -18,13 +15,6 @@ public class BallPool : MonoBehaviour
     }
 
     void Start() {
-        Time.timeScale = 1f;
-
-        for (int i = 0; i < amountToPool; i++) {
-            GameObject obj = Instantiate(ballPrefab);
-            obj.SetActive(false);
-            pooledObjects.Add(obj);
-        }
     }
 
     public GameObject GetPooledObject() {

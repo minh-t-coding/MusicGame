@@ -1,7 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
- 
+using UnityEngine.EventSystems;
+
 public class DrawManager : MonoBehaviour {
     private Camera cam;
     [SerializeField] private Line linePrefab;
@@ -31,12 +30,14 @@ public class DrawManager : MonoBehaviour {
     }
 
     private void drawLine(Vector2 mousePos) {
-        if (Input.GetMouseButtonDown(0)) {
-            currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
-        }
- 
-        if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) {
-            currentLine.SetPosition(mousePos);
+        if (!EventSystem.current.IsPointerOverGameObject()) { // Make sure we don't draw if mouse over UI
+            if (Input.GetMouseButtonDown(0)) {
+                currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
+            }
+    
+            if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) {
+                currentLine.SetPosition(mousePos);
+            }
         }
     }
 
