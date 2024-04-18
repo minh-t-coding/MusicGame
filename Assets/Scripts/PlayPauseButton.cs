@@ -13,4 +13,8 @@ public class PlayPauseButton : MonoBehaviour {
             button.image.sprite = playSprite;
         }
     }
+
+    public void StopPlaying() {
+        button.image.sprite = playSprite;
+    }
 }
