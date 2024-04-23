@@ -9,37 +9,12 @@ public class Line : MonoBehaviour
     [SerializeField] private EdgeCollider2D edgeCollider;
 
     private NoteState noteState;
-
-    [SerializeField] private String noteType; // TODO: REMOVE LATER
-    [SerializeField] private Color color;  // TODO: REMOVE LATER
-
     private readonly List<Vector2> points = new List<Vector2>();
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Awake() {
         edgeCollider.transform.position = Vector3.zero;
         this.noteState = StateManager.instance.getNoteState();
-        
-
-        if (noteType != "" && color != null) {  // TODO: REMOVE LATER
-            NoteState.Note note = NoteState.Note.none;
-            switch (noteType) {
-                case "Snare":
-                    note = NoteState.Note.snare;
-                    break;
-                case "Hat":
-                    note = NoteState.Note.hat;
-                    break;
-                case "Kick":
-                    note = NoteState.Note.kick;
-                    break;
-                case "Clap":
-                    note = NoteState.Note.clap;
-                    break;
-            }
-            this.noteState = new NoteState(note);
-        }
 
         lineRenderer.startColor = noteState.getColor();
         lineRenderer.endColor = noteState.getColor();
@@ -50,7 +25,35 @@ public class Line : MonoBehaviour
             AudioManager.instance.playNote(noteState.getNote());
         }
     }
-    
+
+    // Used to construct/initialize a line of given properties, to be called after Instantiate
+    public void SetUp(NoteState newNoteState, List<Vector2> points) {
+        this.noteState = newNoteState;
+   
+        lineRenderer.startColor = noteState.getColor();
+        lineRenderer.endColor = noteState.getColor();
+
+        foreach (Vector2 point in points) {
+            this.points.Add(point);
+
+            lineRenderer.positionCount++;
+            lineRenderer.SetPosition(lineRenderer.positionCount-1, point);
+        }
+        edgeCollider.points = points.ToArray();
+    }
+
+    public override string ToString() {
+        string pointsString = "POINTS: [";
+        for (int i = 0; i < points.Count; i++) {
+            pointsString += $"({points[i].x}, {points[i].y})";
+            if (i < points.Count - 1) {
+                pointsString += ", ";
+            }
+        }
+        pointsString += "]";
+        return $"NOTESTATE: {noteState.ToString()}\n{pointsString}\nPOSITION: {this.gameObject.transform.position}";
+    }
+
 
     public void SetPosition(Vector2 pos) {
         if(!CanAppend(pos)) return;
@@ -67,6 +70,14 @@ public class Line : MonoBehaviour
         if (lineRenderer.positionCount == 0) return true;
  
         return Vector2.Distance(lineRenderer.GetPosition(lineRenderer.positionCount - 1), pos) > DrawManager.RESOLUTION;
+    }
+
+    public List<Vector2> getPoints() {
+        return this.points;
+    }
+
+    public NoteState getNoteState() {
+        return this.noteState;
     }
 
     public int getPointsCount() {
