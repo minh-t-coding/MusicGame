@@ -46,11 +46,11 @@ public class StateManager : MonoBehaviour {
         Vector2 cursorHotspot;
         switch (brushState) {
             case BrushState.Pencil:
-                cursorHotspot = new Vector2(cursorTextures[0].width / 2, cursorTextures[0].height / 2); // Getting the middle of the cursor
+                cursorHotspot = new Vector2(0, cursorTextures[0].height);
                 Cursor.SetCursor(cursorTextures[0], cursorHotspot, CursorMode.Auto);
                 break;
             case BrushState.Eraser:
-                cursorHotspot = new Vector2(cursorTextures[1].width / 2, cursorTextures[1].height / 2);
+                cursorHotspot = new Vector2(cursorTextures[1].width/2, cursorTextures[1].height/2);
                 Cursor.SetCursor(cursorTextures[1], cursorHotspot, CursorMode.Auto);
                 break;
         }
