@@ -16,6 +16,8 @@ public class DrawManager : MonoBehaviour {
     private Dictionary<string, Line> allLines = new Dictionary<string, Line>();
     private IDataService dataService = new JsonDataService();
 
+    private Stack<ICommand> undoStack = new Stack<ICommand>();
+
     private void Awake() {
         if (instance == null) {
             instance = this;
@@ -43,16 +45,16 @@ public class DrawManager : MonoBehaviour {
             cleanupPointLines();
         }
 
-        if (Input.GetKeyDown(KeyCode.S)) {
-            SerializeJson();
-        }
-
-        if (Input.GetKeyDown(KeyCode.L)) {
-            DeserializeJson();
+        if (Input.GetKey(KeyCode.LeftControl) || Input.GetKey(KeyCode.RightControl)) {
+            if (Input.GetKeyDown(KeyCode.Z)) {
+                Debug.Log("CTRL + Z Detected");
+                Undo();
+                return; // Don't process other input if undo is triggered
+            }
         }
     }
 
-    public void SerializeJson() {
+    public string SerializeJson() {
         // Convert Lines to LineData
         List<LineData> allLineData = new List<LineData>();
         foreach (Line line in allLines.Values) {
@@ -65,12 +67,12 @@ public class DrawManager : MonoBehaviour {
         }
 
         // Save as JSON
-        dataService.SaveData("/lines.json", allLineData);
+        return dataService.SaveData(allLineData);
     }
 
-    public void DeserializeJson() {
+    public void DeserializeJson(string dataString) {
         // Load LineData
-        List<LineData> allLineData = dataService.LoadData<List<LineData>>("/lines.json");
+        List<LineData> allLineData = dataService.LoadData<List<LineData>>(dataString);
 
         // Convert LineData to Lines
         foreach (LineData lineData in allLineData) {
@@ -82,6 +84,41 @@ public class DrawManager : MonoBehaviour {
                 points.Add(point.ToVector2());
             }
             newline.SetUp(noteState, points);
+
+            allLines.Add(newline.name, newline);
+        }
+    }
+
+    public void ClearLines() {
+        GameObject[] allObjects = GameObject.FindGameObjectsWithTag("IsErasable");
+        foreach(GameObject obj in allObjects) {
+            Destroy(obj);
+        }
+        allLines.Clear();
+    }
+
+    private void Undo() {
+        if (undoStack.Count > 0) {
+            ICommand lastCommand = undoStack.Pop();
+            LineData lineData = lastCommand.Undo();
+
+            if (lastCommand is EraseCommand) { // Use Line data to reconstruct the line
+                Line newline = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
+                newline.name = lineData.name;
+                NoteState noteState = new NoteState(lineData.note);
+                List<Vector2> points = new List<Vector2>();
+                foreach (Vector2Data point in lineData.points) {
+                    points.Add(point.ToVector2());
+                }
+                newline.SetUp(noteState, points);
+
+                allLines.Add(newline.name, newline);
+            }
+            if (lastCommand is DrawCommand) { // Use Line data to erase and destroy the line
+                Line line = allLines[lineData.name];
+                allLines.Remove(lineData.name);
+                Destroy(line.gameObject);
+            }
         }
     }
 
@@ -89,6 +126,10 @@ public class DrawManager : MonoBehaviour {
         if (Input.GetMouseButtonDown(0)) {
             currentLine = Instantiate(linePrefab, mousePos, Quaternion.identity);
             currentLine.name = Guid.NewGuid().ToString();
+
+             // Push draw action onto undo stack
+            DrawCommand drawCommand = new DrawCommand(new LineData(currentLine.name, NoteState.Note.none, null));
+            undoStack.Push(drawCommand);
         }
 
         if (Input.GetMouseButton(0) && !Input.GetMouseButtonDown(0)) {
@@ -109,6 +150,15 @@ public class DrawManager : MonoBehaviour {
                     GameObject clickedObject = hit.collider.gameObject.transform.gameObject;
 
                     if (IsErasable(clickedObject)) {
+                        Line line = allLines[clickedObject.name];
+                        NoteState currLineNoteState = line.getNoteState();
+                        List<Vector2Data> vector2Data = new List<Vector2Data>();
+                        foreach (Vector2 point in line.getPoints()) {
+                            vector2Data.Add(new Vector2Data(point.x, point.y));
+                        }
+                        EraseCommand eraseCommand = new EraseCommand(new LineData(line.name, currLineNoteState.getNote(), vector2Data));
+                        undoStack.Push(eraseCommand);
+                    
                         allLines.Remove(clickedObject.name);
                         Destroy(clickedObject);
                     }
@@ -122,6 +172,9 @@ public class DrawManager : MonoBehaviour {
         if (Input.GetMouseButtonUp(0) && currentLine.getPointsCount() < 2 && currentLine != null) {
             allLines.Remove(currentLine.name);
             Destroy(currentLine.gameObject);
+            if (undoStack.Count > 0) {
+                undoStack.Pop();
+            }
         }
     }
 
