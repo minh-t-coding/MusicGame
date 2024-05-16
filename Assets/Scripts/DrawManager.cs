@@ -77,7 +77,7 @@ public class DrawManager : MonoBehaviour {
         // Convert LineData to Lines
         foreach (LineData lineData in allLineData) {
             Line newline = Instantiate(linePrefab, Vector2.zero, Quaternion.identity);
-            newline.name = lineData.name;
+            newline.name = Guid.NewGuid().ToString();
             NoteState noteState = new NoteState(lineData.note);
             List<Vector2> points = new List<Vector2>();
             foreach (Vector2Data point in lineData.points) {
