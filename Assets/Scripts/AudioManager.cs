@@ -17,17 +17,26 @@ public class AudioManager : MonoBehaviour {
 
     public void playNote(NoteState.Note note) {
         switch (note) {
-            case NoteState.Note.clap:
+            case NoteState.Note.C:
                 src.PlayOneShot(sfx[0]);
                 break;
-            case NoteState.Note.hat:
+            case NoteState.Note.D:
                 src.PlayOneShot(sfx[1]);
                 break;
-            case NoteState.Note.kick:
+            case NoteState.Note.E:
                 src.PlayOneShot(sfx[2]);
                 break;
-            case NoteState.Note.snare:
+            case NoteState.Note.F:
                 src.PlayOneShot(sfx[3]);
+                break;
+            case NoteState.Note.G:
+                src.PlayOneShot(sfx[4]);
+                break;
+            case NoteState.Note.A:
+                src.PlayOneShot(sfx[5]);
+                break;
+            case NoteState.Note.B:
+                src.PlayOneShot(sfx[6]);
                 break;
         }
     }
