@@ -1,10 +1,13 @@
 using UnityEngine;
 public class NoteState {
     public enum Note {
-        hat,
-        kick,
-        snare,
-        clap,
+        C,
+        D,
+        E,
+        F,
+        G,
+        A,
+        B,
         none
     }
 

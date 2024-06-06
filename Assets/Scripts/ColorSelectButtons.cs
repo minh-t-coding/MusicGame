@@ -19,17 +19,26 @@ public class ColorSelectButtons : MonoBehaviour {
             case "None":
                 note = NoteState.Note.none;
                 break;
-            case "Kick":
-                note = NoteState.Note.kick;
+            case "C":
+                note = NoteState.Note.C;
                 break;
-            case "Clap":
-                note = NoteState.Note.clap;
+            case "D":
+                note = NoteState.Note.D;
                 break;
-            case "Snare":
-                note = NoteState.Note.snare;
+            case "E":
+                note = NoteState.Note.E;
                 break;
-            case "Hat":
-                note = NoteState.Note.hat;
+            case "F":
+                note = NoteState.Note.F;
+                break;
+            case "G":
+                note = NoteState.Note.G;
+                break;
+            case "A":
+                note = NoteState.Note.A;
+                break;
+            case "B":
+                note = NoteState.Note.B;
                 break;
         }
         currentColor.color = NoteColorLookupTable.GetValue(note);  
