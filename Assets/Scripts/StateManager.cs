@@ -33,7 +33,7 @@ public class StateManager : MonoBehaviour {
         this.isPlaying = false;
         this.originalFixedDeltaTime = Time.fixedDeltaTime; // Save a reference to the original fixedDeltaTime
         Time.timeScale = 0f;
-        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
+        // Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
     }
 
     void Update() {
@@ -65,7 +65,7 @@ public class StateManager : MonoBehaviour {
             Time.timeScale = 1f;
             CameraSystem.instance.UseBallFollowCamera();
         }
-        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
+        // Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
     }
 
     public void StopPlaying() {
@@ -73,7 +73,7 @@ public class StateManager : MonoBehaviour {
         CameraSystem.instance.ResetCamera();
         BallController.instance.ResetBallPosition();
         Time.timeScale = 0f;
-        Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
+        // Time.fixedDeltaTime = this.originalFixedDeltaTime * Time.timeScale;
 
     }
 
