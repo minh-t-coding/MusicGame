@@ -3,13 +3,19 @@ using UnityEngine.UI;
 
 public class ColorSelectButtons : MonoBehaviour {
     [SerializeField] private Button[] buttons;
-    [SerializeField] private Image currentColor;
+    [SerializeField] private GameObject currentColor;
+    [SerializeField] private GameObject noneButton;
+    [SerializeField] private float currentColorSelectorOffset;
 
     void Start() {
         // Attach onClick event listeners to each button
         foreach (Button button in buttons) {
             button.onClick.AddListener(() => ButtonClicked(button));
         }
+
+        // Move selector to the noneButton
+        // Vector3 newPosition = noneButton.transform.position + new Vector3(0, currentColorSelectorOffset);
+        // currentColor.transform.position = newPosition;
     }
 
     void ButtonClicked(Button clickedButton) {
@@ -41,7 +47,10 @@ public class ColorSelectButtons : MonoBehaviour {
                 note = NoteState.Note.B;
                 break;
         }
-        currentColor.color = NoteColorLookupTable.GetValue(note);  
+        
+        Vector3 newPosition = clickedButton.transform.position + new Vector3(0, currentColorSelectorOffset);
+        currentColor.transform.position = newPosition;
+        
         StateManager.instance.setNoteState(new NoteState(note));
     }
 }
